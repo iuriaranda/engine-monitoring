@@ -1,27 +1,20 @@
 #ifndef __SRC_RESISTANCE_SENSOR_H__
 #define __SRC_RESISTANCE_SENSOR_H__
 
-#include <Adafruit_ADS1X15.h>
-
-#include "configuration.h"
-#include "sensesp.h"
-#include "sensesp/sensors/sensor.h"
+#include "voltage_sensor.h"
 
 namespace sensesp {
 
-class ResistanceSensor : public FloatSensor {
+class ResistanceSensor : public VoltageSensor {
    public:
-    ResistanceSensor(Adafruit_ADS1115* ads1115, int channel, uint read_delay = 500, String config_path = "");
-    void start() override final;
-    virtual void get_configuration(JsonObject& doc) override final;
-    virtual bool set_configuration(const JsonObject& config) override final;
-    virtual String get_config_schema() override;
+    ResistanceSensor(Adafruit_ADS1115* ads1115, int channel, uint read_delay = 500, String config_path = "") : VoltageSensor(ads1115, channel, read_delay, config_path){};
 
    private:
-    Adafruit_ADS1115* ads1115_;
-    uint read_delay_;
-    int channel_;
-    void update();
+    void update() {
+        int16_t adc_output = ads1115_->readADC_SingleEnded(channel_);
+        float adc_output_volts = ads1115_->computeVolts(adc_output);
+        this->emit(ADS1115INPUTSCALE * adc_output_volts / ADS1115MEASUREMENTCURRENT);
+    };
 };
 
 }  // namespace sensesp

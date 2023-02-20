@@ -1,8 +1,8 @@
-#include "resistance_sensor.h"
+#include "voltage_sensor.h"
 
 namespace sensesp {
 
-ResistanceSensor::ResistanceSensor(Adafruit_ADS1115* ads1115, int channel, uint read_delay, String config_path)
+VoltageSensor::VoltageSensor(Adafruit_ADS1115* ads1115, int channel, uint read_delay, String config_path)
     : FloatSensor(config_path),
       ads1115_{ads1115},
       read_delay_{read_delay},
@@ -10,17 +10,17 @@ ResistanceSensor::ResistanceSensor(Adafruit_ADS1115* ads1115, int channel, uint 
     load_configuration();
 }
 
-void ResistanceSensor::start() {
+void VoltageSensor::start() {
     ReactESP::app->onRepeat(read_delay_, [this]() { this->update(); });
 }
 
-void ResistanceSensor::update() {
+void VoltageSensor::update() {
     int16_t adc_output = ads1115_->readADC_SingleEnded(channel_);
     float adc_output_volts = ads1115_->computeVolts(adc_output);
     this->emit(ADS1115INPUTSCALE * adc_output_volts / ADS1115MEASUREMENTCURRENT);
 };
 
-void ResistanceSensor::get_configuration(JsonObject& root) {
+void VoltageSensor::get_configuration(JsonObject& root) {
     root["read_delay"] = read_delay_;
     root["channel"] = channel_;
 };
@@ -33,9 +33,9 @@ static const char SCHEMA[] PROGMEM = R"###({
     }
   })###";
 
-String ResistanceSensor::get_config_schema() { return FPSTR(SCHEMA); }
+String VoltageSensor::get_config_schema() { return FPSTR(SCHEMA); }
 
-bool ResistanceSensor::set_configuration(const JsonObject& config) {
+bool VoltageSensor::set_configuration(const JsonObject& config) {
     String expected[] = {"read_delay", "channel"};
     for (auto str : expected) {
         if (!config.containsKey(str)) {

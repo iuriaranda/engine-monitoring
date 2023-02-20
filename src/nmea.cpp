@@ -83,18 +83,32 @@ void Nmea::connect_engine_run_time(ValueProducer<float> *p) {
 void Nmea::connect_water_level(ValueProducer<float> *p) {
     p->connect_to(new LambdaConsumer<float>([&](float value) {
         water_level_ = value;
-        this->sendFluidLevel();
+        this->sendWaterTankData();
     }));
 }
 
 void Nmea::connect_water_capacity(ValueProducer<float> *p) {
     p->connect_to(new LambdaConsumer<float>([&](float value) {
         water_capacity_ = value;
-        this->sendFluidLevel();
+        this->sendWaterTankData();
     }));
 }
 
-void Nmea::sendFluidLevel() {
+void Nmea::connect_fuel_level(ValueProducer<float> *p) {
+    p->connect_to(new LambdaConsumer<float>([&](float value) {
+        fuel_level_ = value;
+        this->sendFuelTankData();
+    }));
+}
+
+void Nmea::connect_fuel_capacity(ValueProducer<float> *p) {
+    p->connect_to(new LambdaConsumer<float>([&](float value) {
+        fuel_capacity_ = value;
+        this->sendFuelTankData();
+    }));
+}
+
+void Nmea::sendWaterTankData() {
     tN2kMsg N2kMsg;
     SetN2kFluidLevel(
         N2kMsg,
@@ -102,6 +116,17 @@ void Nmea::sendFluidLevel() {
         N2kft_Water,
         water_level_,
         water_capacity_);
+    nmea2000_->SendMsg(N2kMsg);
+}
+
+void Nmea::sendFuelTankData() {
+    tN2kMsg N2kMsg;
+    SetN2kFluidLevel(
+        N2kMsg,
+        0,
+        N2kft_Fuel,
+        fuel_level_,
+        fuel_capacity_);
     nmea2000_->SendMsg(N2kMsg);
 }
 

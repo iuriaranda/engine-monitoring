@@ -22,13 +22,16 @@ class Nmea {
     void connect_engine_run_time(ValueProducer<float> *p);
     void connect_water_level(ValueProducer<float> *p);
     void connect_water_capacity(ValueProducer<float> *p);
+    void connect_fuel_level(ValueProducer<float> *p);
+    void connect_fuel_capacity(ValueProducer<float> *p);
 
    private:
     void
     sendEngineData();
     void sendExhaustTemperature(float temperature);
     void sendEngineRpms(float rpms);
-    void sendFluidLevel();
+    void sendWaterTankData();
+    void sendFuelTankData();
 
     tNMEA2000 *nmea2000_;
     double oil_temperature_ = N2kDoubleNA;
@@ -37,6 +40,8 @@ class Nmea {
     double engine_hours_ = N2kDoubleNA;
     double water_level_ = N2kDoubleNA;
     double water_capacity_ = N2kDoubleNA;
+    double fuel_level_ = N2kDoubleNA;
+    double fuel_capacity_ = N2kDoubleNA;
 };
 
 }  // namespace sensesp

@@ -1,0 +1,3 @@
+[submodule "lib/Arduino_DS1603L"]
+	path = lib/Arduino_DS1603L
+	url = https://github.com/wvmarle/Arduino_DS1603L.git

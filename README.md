@@ -20,6 +20,7 @@ This repo implements an engine monitoring system based on the [SH-ESP32 developm
 
 - Change alt. wire
 - Fuse alt. wire
+- Enable / disable Victron Orion DC-DC chargers via bluetooth
 
 
 On the DS1603L: 

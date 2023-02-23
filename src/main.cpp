@@ -135,7 +135,7 @@ void setup1WireTempSensors(Nmea *nmea) {
 
 void setupWaterTank(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
     // Tank level
-    auto fresh_water_tank_level = (new ResistanceSensor(ads1115, 3, 500, "/data/fresh_water_tank_level/sensor"))
+    auto fresh_water_tank_level = (new ResistanceSensor(ads1115, FRESH_WATER_TANK_SENSOR_CHANNEL, 500, "/data/fresh_water_tank_level/sensor"))
                                       ->connect_to(new MovingAverage(10, 1.0, "/data/fresh_water_tank_level/samples"))
                                       ->connect_to(new TankLevelSender("/data/fresh_water_tank_level/interpolator"));
     fresh_water_tank_level->connect_to(new SKOutputFloat(
@@ -189,7 +189,7 @@ void setupEngineRpmsAndRuntime(Nmea *nmea) {
 }
 
 void setupEngineCoolantTemperature(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
-    auto engine_coolant_temperature_resistance = new ResistanceSensor(ads1115, 0, 500, "/data/engine_coolant_temperature/sensor");
+    auto engine_coolant_temperature_resistance = new ResistanceSensor(ads1115, ENGINE_COOLANT_TEMP_SENSOR_CHANNEL, 500, "/data/engine_coolant_temperature/sensor");
     auto engine_coolant_temperature = engine_coolant_temperature_resistance->connect_to(new CoolantTempSender("/data/engine_coolant_temperature/interpolator"));
     nmea->connect_coolant_temperature(engine_coolant_temperature);
     engine_coolant_temperature->connect_to(new SKOutputFloat(
@@ -208,7 +208,7 @@ void setupEngineCoolantTemperature(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
 }
 
 void setupEngineOilTemperature(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
-    auto engine_oil_pressure_resistance = new ResistanceSensor(ads1115, 1, 500, "/data/engine_oil_pressure/sensor");
+    auto engine_oil_pressure_resistance = new ResistanceSensor(ads1115, ENGINE_OIL_PRESSURE_SENSOR_CHANNEL, 500, "/data/engine_oil_pressure/sensor");
     auto engine_oil_pressure = engine_oil_pressure_resistance->connect_to(new OilPressureSender("/data/engine_oil_pressure/interpolator"));
     nmea->connect_oil_pressure(engine_oil_pressure);
     engine_oil_pressure->connect_to(new SKOutputFloat(
@@ -221,7 +221,7 @@ void setupEngineOilTemperature(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
 }
 
 void setupAlternatorOutput(Nmea *nmea, Adafruit_ADS1115 *ads1115) {
-    auto alternator_output_voltage = new VoltageSensor(ads1115, 1, 500, "/data/alternator_output/sensor");
+    auto alternator_output_voltage = new VoltageSensor(ads1115, ALTERNATOR_OUTPUT_SENSOR_CHANNEL, 500, "/data/alternator_output/sensor");
     // Alt. I = (V / R) * transformer multiplier
     auto alternator_output = alternator_output_voltage->connect_to(new Linear(PZCT02_MULTIPLIER * (1 / PZCT02_BURDEN_RESISTANCE), 0, "/data/alternator_output/linear"));
     alternator_output->connect_to(new SKOutputFloat(

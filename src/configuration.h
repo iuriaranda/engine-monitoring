@@ -7,7 +7,7 @@
 #define ONEWIRE_PIN 4
 
 // Alternator W-terminal pin on SH-ESP32
-#define RPM_PIN 15
+#define RPM_PIN 15  // pin 1 in the engine top hat
 #define RPM_MULTIPLIER 1.0 / 1.0
 
 // I2C (SDA and SCL) pins on SH-ESP32
@@ -42,6 +42,12 @@
 
 // Default capacity value for the fresh water tank, in cubic meters (m3)
 #define FRESH_WATER_TANK_CAPACITY 300. / 1000
+
+// Channel numbers for the ADS1115 pins (analog pins in the engine hat)
+#define FRESH_WATER_TANK_SENSOR_CHANNEL 0
+#define ENGINE_COOLANT_TEMP_SENSOR_CHANNEL 2
+#define ENGINE_OIL_PRESSURE_SENSOR_CHANNEL 1
+#define ALTERNATOR_OUTPUT_SENSOR_CHANNEL 3
 
 #define ctok(c) c + 273.15
 #define bartopa(bar) bar * 100000

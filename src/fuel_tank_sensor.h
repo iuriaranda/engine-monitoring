@@ -24,7 +24,6 @@ class FuelTankSensor : public FloatSensor {
     int8_t empty_mm_;
     int8_t full_mm_;
     uint read_delay_;
-    void update();
 };
 
 }  // namespace sensesp
